@@ -34,7 +34,7 @@ public class Piso {
 	}
 
 	public void dibujarse(Entorno entorno) {
-		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.white);
+		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
 	}
 
 	public int extremoIzquierdo() {

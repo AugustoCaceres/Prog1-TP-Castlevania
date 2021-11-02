@@ -12,6 +12,7 @@ public class Barbarianna {
 	private int ancho;
 	private boolean saltando;
 	private boolean agachada;
+	private boolean escudo;
 	
 	public Barbarianna(int x, int y) {
 		this.x = x;
@@ -20,6 +21,7 @@ public class Barbarianna {
 		this.ancho = 30;
 		this.saltando = false;
 		this.agachada = false;
+		this.escudo = false;
 	}
 	
 	public void dibujarse(Entorno entorno) {
@@ -29,10 +31,15 @@ public class Barbarianna {
 		} else if (entorno.estaPresionada(entorno.TECLA_ABAJO) || entorno.estaPresionada('s')) {
 			this.agacharse(entorno);
 			this.saltando = false;
+		} else if (entorno.estaPresionada('c')) {
+			this.cubrirse(entorno);
+			this.saltando = false;
+			this.agachada = false;
 		} else {
 			entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.altura, 0, Color.orange); 
 			this.saltando = false;
 			this.agachada = false;
+			this.escudo = false;
 		}
 	}
 	
@@ -100,6 +107,14 @@ public class Barbarianna {
 		this.agachada = agachada;
 	}
 
+	public boolean isEscudo() {
+		return escudo;
+	}
+
+	public void setEscudo(boolean escudo) {
+		this.escudo = escudo;
+	}
+
 	public void u() {
 		y += 100;
 	}
@@ -112,6 +127,11 @@ public class Barbarianna {
 	public void agacharse(Entorno entorno) {
 		this.agachada = true;
 		entorno.dibujarRectangulo(this.x, this.y + 10, 30, 50, 190, Color.orange);
+	}
+	
+	public void cubrirse(Entorno entorno) {
+		this.escudo = true;
+		entorno.dibujarRectangulo(this.x, this.y, 15, 50, 0, Color.white);
 	}
 
 }

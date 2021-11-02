@@ -1,7 +1,6 @@
 package juego;
 
 import java.awt.Color;
-//import java.util.Random;
 import java.util.Random;
 
 import entorno.Entorno;
@@ -115,14 +114,14 @@ public class Velocirraptor {
 				//if (rayoLaser != null) {
 					if (rayoX == 95 
 							&& !rayoLaser.isActivo() 
-							&& rayoLaser.getSentido().equals("izquierda")
-							&& this.x > 100) {
+							&& rayoLaser.getSentido().equals("izquierda")) {
 						this.rayoLaser = new RayoLaser(this.x, this.y);
 						this.rayoLaser.setActivo(true);
 					}
 					if (rayoLaser.isActivo() 
 							&& rayoLaser.getX() > 10 
-							&& this.direccion.equals("izquierda")){
+							&& this.direccion.equals("izquierda")
+							&& this.x > 50){
 						this.rayoLaser.moverIzquierda();
 						this.rayoLaser.dibujarse(entorno);
 					} 
@@ -142,12 +141,14 @@ public class Velocirraptor {
 					if (rayoX == 95 
 							&& !rayoLaser.isActivo()
 							&& rayoLaser.getSentido().equals("derecha")
-							&& this.x < 700) {
+							) {
 						this.rayoLaser = new RayoLaser(this.x, this.y);
 						this.rayoLaser.setActivo(true);
 					} 
-					if (rayoLaser.isActivo() && rayoLaser.getX() < 790 
-							&& this.direccion.equals("derecha")){
+					if (rayoLaser.isActivo() 
+							&& rayoLaser.getX() < 790 
+							&& this.direccion.equals("derecha")
+							&& this.x < 750){
 						this.rayoLaser.moverDerecha();
 						this.rayoLaser.dibujarse(entorno);
 					} 

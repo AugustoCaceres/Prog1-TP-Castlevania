@@ -2,6 +2,8 @@ package juego;
 
 import entorno.Entorno;
 import java.awt.Color;
+import java.awt.Image;
+import entorno.Herramientas;
 
 public class Commodore {
 
@@ -9,16 +11,21 @@ public class Commodore {
 	private int y;
 	private int ancho;
 	private int alto;
+	private Image commodore;
 	
 	public Commodore(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.ancho = 30;
 		this.alto = 30;
+		this.commodore = Herramientas.cargarImagen("commodore-128.png");
 	}
 	
 	public void dibujarse (Entorno entorno) {
+		
 		entorno.dibujarRectangulo(this.x, this.y - 30, this.ancho, this.alto, 0, Color.blue);
+		entorno.dibujarImagen(commodore, this.x, this.y - 30, 0, 0.09);
+		
 	}
 
 	public int getX() {

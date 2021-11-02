@@ -1,9 +1,11 @@
 package juego;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 import entorno.InterfaceJuego;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 
 
 public class Juego extends InterfaceJuego {
@@ -16,9 +18,10 @@ public class Juego extends InterfaceJuego {
 	private Piso pisos[];
 	private Velocirraptor velocirraptors[];
 	private Rayo rayo;
+	private Image imgGanar, imgPerder, fondo, inicio;
 	
 	private int vidas, puntos, segundos, velocirraptorsEliminados;
-	private boolean jugando, disparo, cambioDireccion;
+	private boolean jugando, disparo, cambioDireccion, terminar;
 	private String direccion;
 	
 	public Juego() {
@@ -31,7 +34,10 @@ public class Juego extends InterfaceJuego {
 		this.barbarianna = new Barbarianna(100, 520);
 		this.pisos = new Piso[5];
 		this.velocirraptors = new Velocirraptor[8];
-		//this.rayoVelocirraptor = new RayoLaser[8];
+		this.imgGanar = Herramientas.cargarImagen("ganaste-png.png");
+		this.imgPerder = Herramientas.cargarImagen("game-over.jpg");
+		this.fondo = Herramientas.cargarImagen("fondo.png");
+		this.inicio = Herramientas.cargarImagen("enter.png");
 		
 		pisos[0] = new Piso(400, 550);
 		pisos[1] = new Piso(200, 450);
@@ -51,11 +57,11 @@ public class Juego extends InterfaceJuego {
 		this.vidas = 3;
 		this.puntos = 0;
 		this.segundos = 0;
-		this.jugando = true;
+		this.jugando = false;
 		this.velocirraptorsEliminados = 0;
 		this.direccion = "derecha";
 		this.cambioDireccion = false;
-		this.disparo = false;
+		this.terminar = false;
 		
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -70,6 +76,15 @@ public class Juego extends InterfaceJuego {
 	public void tick() {
 		// Procesamiento de un instante de tiempo
 		// ...
+		if (!terminar) {
+			entorno.dibujarImagen(inicio, 400, 300, 0, 0.5);
+		}
+		
+		if (entorno.sePresiono(entorno.TECLA_ENTER) && !terminar) {
+			entorno.dibujarImagen(inicio, 400, 300, 0, 0.5);
+			jugando = true;
+		}
+		
 		if (jugando == true) {
 			segundos++;
 			
@@ -92,12 +107,26 @@ public class Juego extends InterfaceJuego {
 			eliminarVelocirraptors();
 			
 			jugando = vidas();
-		}
+			
+		} else {
+			
+			if (vidas == 0) {
+				
+				entorno.dibujarImagen(imgPerder, 390, 300, 0, 0.5);
+			} 
+			
+			if (terminar && vidas > 0){
+					entorno.dibujarImagen(imgGanar, 375, 300, 0, 1);
+					
+				}
+			}
 		
 	}
 	
 	//crear los elementos estáticos del juego
 	public void dibujarPantalla() {
+		
+		entorno.dibujarImagen(fondo, 400, 265, 0, 1.8);
 		
 		entorno.cambiarFont(Font.MONOSPACED, 20, Color.white);
 		entorno.escribirTexto("Vidas: "+ this.vidas, 20, 590);
@@ -289,9 +318,7 @@ public class Juego extends InterfaceJuego {
 			this.barbarianna = new Barbarianna(100, 520);
 		
 			if (vidas == 0) {
-				
-				entorno.escribirTexto("Perdiste!", 400, 300);
-				
+				terminar = true;
 				return false;
 			
 			}
@@ -300,6 +327,7 @@ public class Juego extends InterfaceJuego {
 		
 		//parte que verifica que barbarianna haya alcanzado la computadora
 		if (barbariannaAlcanzaObjetivo()) {
+			terminar = true;
 			System.out.println("Ganaste!");
 			return false;
 		}
@@ -400,7 +428,10 @@ public class Juego extends InterfaceJuego {
 	public boolean choqueRayoBarbarianna() {
 		for (int i = 0; i < velocirraptors.length; i++) {
 			if (velocirraptors[i] != null) {
-				if (seTocan(barbarianna, velocirraptors[i].getRayoLaser()) && !this.barbarianna.isSaltando() && !this.barbarianna.isAgachada()) {
+				if (seTocan(barbarianna, velocirraptors[i].getRayoLaser()) 
+						&& !this.barbarianna.isSaltando() 
+						&& !this.barbarianna.isAgachada()
+						&& !this.barbarianna.isEscudo()) {
 					return true;
 				}	
 			}
